@@ -1,0 +1,9 @@
+apiVersion: v1
+description: A Helm chart for Kubernetes
+name: hello-server
+keywords:
+  - hello-server
+maintainers:
+  - name: Brandon Barfkey
+    email: brandon.bethke@neudesic.com
+version: 0.1.0

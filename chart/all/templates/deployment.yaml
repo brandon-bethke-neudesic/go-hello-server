@@ -1,0 +1,39 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  selector:
+    app: {{ .Chart.Name }}
+  ports:
+  - name: '8080'
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+    nodePort: 0
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  replicas: {{default 1 .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{default "notification-server" .Values.image }}
+        imagePullPolicy: "IfNotPresent"
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 300
+        ports:
+        - containerPort: 8080
